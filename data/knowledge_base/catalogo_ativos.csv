@@ -1,0 +1,33 @@
+tag,tipo_ativo,componente,fabricante,modelo,km,sentido,localizacao,data_instalacao,vida_util_anos,impacto_seguranca,impacto_arrecadacao,criticidade,redundancia,cobertura_redundante,status,origem
+CFT-K382-N01,cftv_ptz,camera_ptz,FAB-ALFA,PTZ-30X-A,382,N,Trecho comum,2019-05-14,8,2,0,B,parcial,CFT-K386-S01 cobre parte do trecho,em_operacao,SIMULADO
+CFT-K386-S01,cftv_ptz,camera_ptz,FAB-BETA,PTZ-25X-B,386,S,Trecho reto,2020-02-03,8,1,0,C,total,sobreposição com CFT-K382-N01,em_operacao,SIMULADO
+CFT-K390-N01,cftv_ptz,camera_ptz,FAB-ALFA,PTZ-30X-A,390,N,Trecho comum,2019-05-14,8,2,0,B,nenhuma,,em_operacao,SIMULADO
+CFT-K395-N01,cftv_ptz,camera_ptz,FAB-BETA,PTZ-25X-B,395,N,Praça de pedágio PP01,2021-09-20,8,2,1,B,parcial,câmeras fixas da praça (fora do escopo),em_operacao,SIMULADO
+CFT-K398-S01,cftv_ptz,camera_ptz,FAB-ALFA,PTZ-30X-A,398,S,Trecho comum,2019-05-14,8,2,0,B,nenhuma,,em_operacao,SIMULADO
+CFT-K402-N01,cftv_ptz,camera_ptz,FAB-BETA,PTZ-25X-B,402,N,Junto ao pórtico PFF-K402,2023-04-11,8,2,0,B,parcial,câmeras OCR do pórtico (sem PTZ),em_operacao,SIMULADO
+CFT-K405-S01,cftv_ptz,camera_ptz,FAB-BETA,PTZ-25X-B,405,S,Trecho comum,2020-02-03,8,2,0,B,nenhuma,,em_operacao,SIMULADO
+CFT-K409-N01,cftv_ptz,camera_ptz,FAB-ALFA,PTZ-30X-A,409,N,Trevo de acesso — ponto crítico,2018-03-08,8,3,0,A,nenhuma,,em_operacao,SIMULADO
+CFT-K416-N01,cftv_ptz,camera_ptz,FAB-ALFA,PTZ-30X-A,416,N,Trecho comum,2019-05-14,8,2,0,B,parcial,CFT-K416-S01 (sentido oposto) cobre parte da pista,em_operacao,SIMULADO
+CFT-K416-S01,cftv_ptz,camera_ptz,FAB-ALFA,PTZ-30X-A,416,S,Trecho comum,2019-05-14,8,2,0,B,parcial,CFT-K416-N01 (sentido oposto) cobre parte da pista,em_operacao,SIMULADO
+CFT-K418-N01,cftv_ptz,camera_ptz,FAB-BETA,PTZ-25X-B,418,N,Praça de pedágio PP02,2021-09-20,8,2,1,B,parcial,câmeras fixas da praça (fora do escopo),em_operacao,SIMULADO
+CFT-K423-S01,cftv_ptz,camera_ptz,FAB-ALFA,PTZ-30X-A,423,S,Início da serra — ponto crítico,2018-03-08,8,3,0,A,nenhuma,,em_operacao,SIMULADO
+CFT-K427-N01,cftv_ptz,camera_ptz,FAB-ALFA,PTZ-30X-A,427,N,"Serra, poste junto a viaduto — ponto crítico",2018-03-08,8,3,0,A,nenhuma,,em_operacao,SIMULADO
+CFT-K431-S01,cftv_ptz,camera_ptz,FAB-ALFA,PTZ-30X-A,431,S,Serra — ponto crítico,2018-03-08,8,3,0,A,nenhuma,,em_operacao,SIMULADO
+LAC-PP01-F01-A,laco_indutivo,laco_vulcanizado,FAB-EPSILON,LACO-VULC-200 + DET-4C,395,-,"Praça PP01, faixa F01 (leves)",2023-03-15,5,1,2,B,nenhuma,,em_operacao,SIMULADO
+LAC-PP01-F02-A,laco_indutivo,laco_vulcanizado,FAB-EPSILON,LACO-VULC-200 + DET-4C,395,-,"Praça PP01, faixa F02 (leves)",2023-03-15,5,1,2,B,nenhuma,,em_operacao,SIMULADO
+LAC-PP01-F03-A,laco_indutivo,laco_vulcanizado,FAB-EPSILON,LACO-VULC-200 + DET-4C,395,-,"Praça PP01, faixa F03 (leves)",2023-03-15,5,1,2,B,nenhuma,,em_operacao,SIMULADO
+LAC-PP01-F04-A,laco_indutivo,laco_vulcanizado,FAB-EPSILON,LACO-VULC-200 + DET-4C,395,-,"Praça PP01, faixa F04 (pesados)",2022-08-22,5,1,3,A,nenhuma,,em_operacao,SIMULADO
+LAC-PP02-F01-A,laco_indutivo,laco_vulcanizado,FAB-EPSILON,LACO-VULC-200 + DET-4C,418,-,"Praça PP02, faixa F01 (leves)",2022-08-22,5,1,2,B,nenhuma,,em_operacao,SIMULADO
+LAC-PP02-F02-A,laco_indutivo,laco_vulcanizado,FAB-EPSILON,LACO-VULC-200 + DET-4C,418,-,"Praça PP02, faixa F02 (leves)",2022-08-22,5,1,2,B,nenhuma,,em_operacao,SIMULADO
+LAC-PP02-F03-A,laco_indutivo,laco_vulcanizado,FAB-EPSILON,LACO-VULC-200 + DET-4C,418,-,"Praça PP02, faixa F03 (pesados)",2022-08-22,5,1,3,A,nenhuma,,em_operacao,SIMULADO
+LAC-PP02-F03-B,laco_indutivo,laco_vulcanizado,FAB-EPSILON,LACO-VULC-200 + DET-4C,418,-,"Praça PP02, faixa F03 (pesados)",2022-08-22,5,1,3,A,nenhuma,,em_operacao,SIMULADO
+LAC-PP02-F04-A,laco_indutivo,laco_vulcanizado,FAB-EPSILON,LACO-VULC-200 + DET-4C,418,-,"Praça PP02, faixa F04 (pesados)",2022-08-22,5,1,3,A,nenhuma,,em_operacao,SIMULADO
+LAC-PP02-F05-A,laco_indutivo,laco_vulcanizado,FAB-EPSILON,LACO-VULC-200 + DET-4C,418,-,"Praça PP02, faixa F05 (leves)",2023-03-15,5,1,2,B,nenhuma,,em_operacao,SIMULADO
+PFF-K402-ANT-01,portico_free_flow,antena_tag,FAB-GAMA,ANT-RFID-915,402,S,"Pórtico PFF-K402, faixa 1",2023-04-11,10,0,3,A,parcial,PFF-K402-OCR-01 (mesma faixa),em_operacao,SIMULADO
+PFF-K402-ANT-02,portico_free_flow,antena_tag,FAB-GAMA,ANT-RFID-915,402,S,"Pórtico PFF-K402, faixa 2",2023-04-11,10,0,3,A,parcial,PFF-K402-OCR-02 (mesma faixa),em_operacao,SIMULADO
+PFF-K402-OCR-01,portico_free_flow,camera_ocr,FAB-DELTA,OCR-LPR-5MP,402,S,"Pórtico PFF-K402, faixa 1",2023-04-11,8,0,3,A,parcial,PFF-K402-ANT-01 (mesma faixa),em_operacao,SIMULADO
+PFF-K402-OCR-02,portico_free_flow,camera_ocr,FAB-DELTA,OCR-LPR-5MP,402,S,"Pórtico PFF-K402, faixa 2",2023-04-11,8,0,3,A,parcial,PFF-K402-ANT-02 (mesma faixa),em_operacao,SIMULADO
+PFF-K436-ANT-01,portico_free_flow,antena_tag,FAB-GAMA,ANT-RFID-915,436,N,"Pórtico PFF-K436, faixa 1",2024-02-26,10,0,3,A,parcial,PFF-K436-OCR-01 (mesma faixa),em_operacao,SIMULADO
+PFF-K436-ANT-02,portico_free_flow,antena_tag,FAB-GAMA,ANT-RFID-915,436,N,"Pórtico PFF-K436, faixa 2",2024-02-26,10,0,3,A,parcial,PFF-K436-OCR-02 (mesma faixa),em_operacao,SIMULADO
+PFF-K436-OCR-01,portico_free_flow,camera_ocr,FAB-DELTA,OCR-LPR-5MP,436,N,"Pórtico PFF-K436, faixa 1",2024-02-26,8,0,3,A,parcial,PFF-K436-ANT-01 (mesma faixa),em_operacao,SIMULADO
+PFF-K436-OCR-02,portico_free_flow,camera_ocr,FAB-DELTA,OCR-LPR-5MP,436,N,"Pórtico PFF-K436, faixa 2",2024-02-26,8,0,3,A,parcial,PFF-K436-ANT-02 (mesma faixa),em_operacao,SIMULADO

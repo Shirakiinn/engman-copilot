@@ -1,0 +1,73 @@
+id_registro,tag,data_abertura,sintoma,categoria_causa,causa_identificada,tipo_intervencao,tempo_reparo_h,peca_trocada,condicao_ambiental,reincidencia_90d,origem
+FSM-SIM-2024-0001,LAC-PP02-F03-A,2024-11-19,Classificação incorreta: caminhão de 3 eixos lido como 2,calibracao_sensibilidade,Sensibilidade do detector desajustada,corretiva,1.5,nenhuma,chuva leve,nao,SIMULADO
+FSM-SIM-2024-0002,CFT-K427-N01,2024-12-03,Imagem tremida e desfocada com tráfego pesado,vibracao_fixacao,Parafusos do suporte frouxos por vibração do viaduto,corretiva,2.5,nenhuma,tráfego pesado,nao,SIMULADO
+FSM-SIM-2024-0003,CFT-K416-N01,2024-12-10,Imagem esbranquiçada/halo à noite; dia normal,obstrucao_optica,Teia de aranha na cúpula refletindo o IR,inspecao,3.0,nenhuma,"noite, tempo seco e quente",nao,SIMULADO
+FSM-SIM-2025-0004,LAC-PP02-F03-A,2025-01-14,Laço sem pulso intermitente,infiltracao_selagem,Selante do corte rompido; infiltração de água,corretiva,5.0,selante epóxi,chuva forte,nao,SIMULADO
+FSM-SIM-2025-0005,CFT-K416-N01,2025-01-22,Imagem esbranquiçada/halo à noite,obstrucao_optica,Teia de aranha na cúpula refletindo o IR,corretiva,2.5,nenhuma,"noite, quente",sim,SIMULADO
+FSM-SIM-2025-0006,CFT-K409-N01,2025-01-29,Desfoque após manutenção no poste,vibracao_fixacao,Suporte reposicionado sem torque correto,corretiva,2.0,nenhuma,—,nao,SIMULADO
+FSM-SIM-2025-0007,CFT-K416-S01,2025-02-03,Imagem esbranquiçada/halo à noite,obstrucao_optica,Teia de aranha na cúpula refletindo o IR,corretiva,2.5,nenhuma,"noite, quente",nao,SIMULADO
+FSM-SIM-2025-0008,CFT-K427-N01,2025-02-11,Imagem tremida e desfocada,vibracao_fixacao,Parafusos do suporte frouxos por vibração do viaduto,corretiva,2.5,nenhuma,tráfego pesado,sim,SIMULADO
+FSM-SIM-2025-0009,LAC-PP02-F03-A,2025-02-25,Classificação incorreta de eixos,infiltracao_selagem,Selante do corte rompido; infiltração de água,corretiva,5.0,selante epóxi,após chuva,sim,SIMULADO
+FSM-SIM-2025-0010,CFT-K416-N01,2025-03-05,Halo noturno e perda de nitidez,obstrucao_optica,Teia de aranha na cúpula refletindo o IR,corretiva,2.5,nenhuma,"noite, quente",sim,SIMULADO
+FSM-SIM-2025-0011,PFF-K402-OCR-01,2025-03-12,Taxa de leitura OCR 91% (limiar 97%),obstrucao_optica,Fuligem de diesel na lente,corretiva,2.0,nenhuma,seco,nao,SIMULADO
+FSM-SIM-2025-0012,LAC-PP02-F03-A,2025-04-08,Classificação incorreta de eixos,calibracao_sensibilidade,Sensibilidade do detector desajustada após resselagem,corretiva,1.5,nenhuma,seco,nao,SIMULADO
+FSM-SIM-2025-0013,CFT-K427-N01,2025-04-29,Desfoque e perda de preset,vibracao_fixacao,Suporte frouxo; preset deslocado,corretiva,3.0,arruelas de pressão,tráfego pesado,sim,SIMULADO
+FSM-SIM-2025-0014,CFT-K395-N01,2025-05-06,Imagem embaçada por condensação interna,obstrucao_optica,Vedação da cúpula ressecada,corretiva,2.5,kit de vedação,madrugada fria e úmida,nao,SIMULADO
+FSM-SIM-2025-0015,PFF-K402-OCR-01,2025-05-20,Taxa de leitura OCR 93%,obstrucao_optica,Fuligem de diesel na lente,corretiva,2.0,nenhuma,seco,sim,SIMULADO
+FSM-SIM-2025-0016,LAC-PP02-F03-A,2025-06-10,Laço sem pulso,dano_pavimento_cabo,Cabo do laço rompido por fissura no pavimento,corretiva,10.0,laço LACO-VULC-200,seco,nao,SIMULADO
+FSM-SIM-2025-0017,CFT-K416-N01,2025-06-18,Imagem embaçada também de dia,obstrucao_optica,Barro e fuligem na cúpula (obra de recapeamento no km 415),corretiva,2.0,nenhuma,"dia seco, obra próxima",nao,SIMULADO
+FSM-SIM-2025-0018,LAC-PP02-F01-A,2025-06-24,Laço sem pulso intermitente,infiltracao_selagem,Selante do corte rompido; infiltração de água,corretiva,4.0,selante epóxi,após chuva,nao,SIMULADO
+FSM-SIM-2025-0019,CFT-K382-N01,2025-07-08,Imagem embaçada de dia,obstrucao_optica,Barro na cúpula (obra de recapeamento),corretiva,2.0,nenhuma,obra próxima,nao,SIMULADO
+FSM-SIM-2025-0020,CFT-K427-N01,2025-07-15,Imagem tremida,vibracao_fixacao,Parafusos do suporte frouxos por vibração do viaduto,corretiva,2.5,nenhuma,tráfego pesado,sim,SIMULADO
+FSM-SIM-2025-0021,PFF-K402-OCR-01,2025-08-05,Queda de leitura OCR entre 17h e 18h,condicao_ambiental,Glare solar no fim da tarde (sol baixo no inverno) — não é falha de hardware,inspecao,3.0,para-sol instalado,"sol baixo, céu limpo",nao,SIMULADO
+FSM-SIM-2025-0022,LAC-PP01-F04-A,2025-08-19,Laço sem pulso,dano_pavimento_cabo,Cabo do laço rompido por fissura no pavimento,corretiva,9.0,laço LACO-VULC-200,seco,nao,SIMULADO
+FSM-SIM-2025-0023,CFT-K386-S01,2025-09-17,Mancha escura fixa na imagem,obstrucao_optica,Ninho de pássaro sobre a cúpula,corretiva,2.0,nenhuma,—,nao,SIMULADO
+FSM-SIM-2025-0024,PFF-K402-ANT-01,2025-09-23,Leitura de TAG intermitente,conexao_alimentacao,Conector do cabo coaxial oxidado,corretiva,2.5,conector N,após chuva,nao,SIMULADO
+FSM-SIM-2025-0025,CFT-K427-N01,2025-09-30,Desfoque e preset deslocado,vibracao_fixacao,Suporte frouxo; preset deslocado,corretiva,3.0,nenhuma,tráfego pesado,sim,SIMULADO
+FSM-SIM-2025-0026,CFT-K423-S01,2025-10-07,Imagem tremida,vibracao_fixacao,Parafusos do suporte frouxos,corretiva,2.0,nenhuma,tráfego pesado,nao,SIMULADO
+FSM-SIM-2025-0027,PFF-K402-OCR-01,2025-10-14,Taxa de leitura OCR 89% só à noite,iluminacao_ir,Iluminador IR degradado,corretiva,4.0,iluminador IR,noite,nao,SIMULADO
+FSM-SIM-2025-0028,LAC-PP02-F03-A,2025-10-21,Classificação incorreta de eixos,infiltracao_selagem,Selante do corte rompido; infiltração de água,corretiva,5.0,selante epóxi,após chuva,nao,SIMULADO
+FSM-SIM-2025-0029,CFT-K416-N01,2025-10-28,Imagem esbranquiçada/halo à noite,obstrucao_optica,Teia de aranha na cúpula refletindo o IR,corretiva,2.5,nenhuma,"noite, quente",nao,SIMULADO
+FSM-SIM-2025-0030,CFT-K402-N01,2025-11-04,Sem imagem e sem ping,comunicacao,Fibra óptica rompida por obra de terceiros,corretiva,6.0,emenda de fibra,obra de terceiros,nao,SIMULADO
+FSM-SIM-2025-0031,LAC-PP02-F03-A,2025-11-25,Laço sem pulso intermitente,infiltracao_selagem,Selante do corte rompido; infiltração de água,corretiva,5.0,selante epóxi,chuva forte,sim,SIMULADO
+FSM-SIM-2025-0032,PFF-K436-OCR-01,2025-12-01,Queda de leitura OCR no início da manhã,condicao_ambiental,Glare solar matinal — não é falha de hardware,inspecao,3.0,para-sol instalado,sol baixo,nao,SIMULADO
+FSM-SIM-2025-0033,CFT-K427-N01,2025-12-02,Imagem tremida e desfocada,vibracao_fixacao,Parafusos do suporte frouxos por vibração do viaduto,corretiva,2.5,nenhuma,tráfego pesado,sim,SIMULADO
+FSM-SIM-2025-0034,CFT-K416-N01,2025-12-09,Imagem esbranquiçada/halo à noite,obstrucao_optica,Teia de aranha na cúpula refletindo o IR,corretiva,2.5,nenhuma,"noite, quente",sim,SIMULADO
+FSM-SIM-2025-0035,LAC-PP02-F03-B,2025-12-16,Laço sem pulso,hardware_eletronico,Placa detectora DET-4C com canal queimado,corretiva,2.0,placa detectora DET-4C,—,nao,SIMULADO
+FSM-SIM-2026-0036,CFT-K431-S01,2026-01-06,Sem imagem,comunicacao,Enlace de rádio desalinhado por vento forte,corretiva,4.0,nenhuma (realinhamento),vento forte,nao,SIMULADO
+FSM-SIM-2026-0037,LAC-PP02-F03-A,2026-01-13,Classificação incorreta de eixos,dano_pavimento_cabo,Trilha de roda > 20 mm alterando a indutância,corretiva,1.5,nenhuma (recalibração paliativa),seco,nao,SIMULADO
+FSM-SIM-2026-0038,PFF-K402-OCR-01,2026-01-20,Taxa de leitura OCR 94%,obstrucao_optica,Fuligem de diesel na lente,corretiva,2.0,nenhuma,seco,nao,SIMULADO
+FSM-SIM-2026-0039,CFT-K416-N01,2026-01-27,Perda total de imagem à noite por ~2 h; voltou sozinha,conexao_alimentacao,Conector RJ45 oxidado na caixa de junção (infiltração),corretiva,4.5,conector RJ45 blindado + vedação,chuva forte,nao,SIMULADO
+FSM-SIM-2026-0040,LAC-PP02-F03-A,2026-02-03,Laço sem pulso intermitente,infiltracao_selagem,Selante do corte rompido; infiltração de água,corretiva,5.0,selante epóxi,chuva forte,sim,SIMULADO
+FSM-SIM-2026-0041,PFF-K402-OCR-02,2026-02-09,Taxa de leitura OCR 94%,obstrucao_optica,Fuligem de diesel na lente,corretiva,1.5,nenhuma,seco,nao,SIMULADO
+FSM-SIM-2026-0042,CFT-K427-N01,2026-02-10,PTZ não segura posição; ruído no movimento,hardware_eletronico,Folga no módulo pan/tilt (desgaste por vibração),corretiva,5.0,módulo pan/tilt,—,nao,SIMULADO
+FSM-SIM-2026-0043,LAC-PP01-F04-A,2026-02-10,Classificação incorreta de eixos,infiltracao_selagem,Selante do corte rompido; infiltração de água,corretiva,4.0,selante epóxi,após chuva,nao,SIMULADO
+FSM-SIM-2026-0044,CFT-K398-S01,2026-02-17,Imagem esbranquiçada/halo à noite,obstrucao_optica,Teia de aranha na cúpula refletindo o IR,corretiva,1.5,nenhuma,"noite, quente",nao,SIMULADO
+FSM-SIM-2026-0045,CFT-K416-N01,2026-02-24,Imagem esbranquiçada/halo à noite,obstrucao_optica,Teia de aranha na cúpula refletindo o IR,corretiva,2.5,nenhuma,"noite, quente",sim,SIMULADO
+FSM-SIM-2026-0046,LAC-PP02-F04-A,2026-03-03,Classificação incorreta de eixos,calibracao_sensibilidade,Sensibilidade do detector desajustada,corretiva,1.0,nenhuma,seco,nao,SIMULADO
+FSM-SIM-2026-0047,CFT-K382-N01,2026-03-10,PTZ sem resposta aos comandos,hardware_eletronico,Firmware travado; reinício remoto,corretiva,1.0,nenhuma,—,nao,SIMULADO
+FSM-SIM-2026-0048,LAC-PP02-F03-A,2026-03-17,Classificação incorreta de eixos,dano_pavimento_cabo,Trilha de roda > 20 mm alterando a indutância,corretiva,1.5,nenhuma (recalibração paliativa),seco,sim,SIMULADO
+FSM-SIM-2026-0049,CFT-K423-S01,2026-03-24,Imagem esbranquiçada/halo à noite,obstrucao_optica,Teia de aranha na cúpula refletindo o IR,corretiva,1.5,nenhuma,"noite, quente",nao,SIMULADO
+FSM-SIM-2026-0050,CFT-K416-N01,2026-04-07,Perda intermitente de imagem à noite,conexao_alimentacao,Umidade na caixa de junção; vedação insuficiente,corretiva,5.0,caixa de junção IP66,após chuva,sim,SIMULADO
+FSM-SIM-2026-0051,CFT-K418-N01,2026-04-14,Imagem escura à noite,iluminacao_ir,Iluminador IR inoperante,corretiva,2.5,iluminador IR,noite,nao,SIMULADO
+FSM-SIM-2026-0052,PFF-K402-OCR-01,2026-04-28,Taxa de leitura OCR 92%,obstrucao_optica,Fuligem de diesel na lente,corretiva,2.0,nenhuma,seco,nao,SIMULADO
+FSM-SIM-2026-0053,PFF-K436-OCR-01,2026-05-05,Taxa de leitura OCR 90% só à noite,iluminacao_ir,Iluminador IR degradado,corretiva,4.0,iluminador IR,noite,nao,SIMULADO
+FSM-SIM-2026-0054,CFT-K416-S01,2026-05-12,Sem imagem e sem ping,comunicacao,Fibra óptica rompida por obra de drenagem,corretiva,5.0,emenda de fibra,obra próxima,nao,SIMULADO
+FSM-SIM-2026-0055,CFT-K427-N01,2026-05-19,Inspeção após reincidência de desfoque,vibracao_fixacao,Trinca na base do poste; vibração transmitida ao suporte,inspecao,6.0,nenhuma,—,nao,SIMULADO
+FSM-SIM-2026-0056,LAC-PP01-F01-A,2026-05-26,Classificação incorreta de eixos,calibracao_sensibilidade,Sensibilidade do detector desajustada,corretiva,1.0,nenhuma,seco,nao,SIMULADO
+FSM-SIM-2026-0057,PFF-K436-ANT-01,2026-06-16,Sessões de cobrança inconsistentes (TAG e placa com horários divergentes),sincronismo_sistema,Relógio da antena dessincronizado (NTP),corretiva,2.0,nenhuma (ajuste remoto),—,nao,SIMULADO
+FSM-SIM-2026-0058,LAC-PP02-F03-A,2026-06-23,Laço sem pulso,dano_pavimento_cabo,Cabo do laço rompido por fissura no pavimento,corretiva,11.0,laço LACO-VULC-200,seco,nao,SIMULADO
+FSM-SIM-2026-0059,CFT-K390-N01,2026-06-30,Sem imagem e sem ping,comunicacao,Switch de campo com porta queimada,corretiva,3.0,switch industrial,após tempestade,nao,SIMULADO
+FSM-SIM-2026-0060,CFT-K409-N01,2026-07-07,Imagem degradada sem perda de link,condicao_ambiental,Neblina densa — sem falha de hardware,inspecao,0.5,nenhuma (verificação remota),neblina,nao,SIMULADO
+FSM-SIM-2026-0061,PFF-K402-OCR-01,2026-07-21,Queda de leitura OCR no fim da tarde,condicao_ambiental,Glare solar no fim da tarde — para-sol desalinhado,inspecao,2.0,nenhuma (realinhamento),"sol baixo, céu limpo",nao,SIMULADO
+FSM-SIM-2026-0062,CFT-K427-N01,2026-08-04,Imagem tremida e desfocada,vibracao_fixacao,Vibração do poste trincado (substituição pendente),corretiva,2.5,nenhuma,tráfego pesado,sim,SIMULADO
+FSM-SIM-2026-0063,PFF-K402-ANT-02,2026-08-12,Antena sem resposta,conexao_alimentacao,Fonte da antena queimada após surto elétrico,corretiva,3.0,fonte da antena,tempestade,nao,SIMULADO
+FSM-SIM-2026-0064,CFT-K395-N01,2026-08-18,PTZ travado em uma posição,hardware_eletronico,Motor de pan queimado,corretiva,5.0,módulo pan/tilt,—,nao,SIMULADO
+FSM-SIM-2026-0065,LAC-PP02-F03-B,2026-08-25,Classificação incorreta de eixos,infiltracao_selagem,Selante do corte rompido; infiltração de água,corretiva,4.0,selante epóxi,após chuva,nao,SIMULADO
+FSM-SIM-2026-0066,CFT-K405-S01,2026-09-08,Câmera desligada,conexao_alimentacao,Fonte queimada após descarga atmosférica,corretiva,3.0,fonte 24 V,tempestade,nao,SIMULADO
+FSM-SIM-2026-0067,PFF-K402-OCR-01,2026-09-15,Taxa de leitura OCR 90% só à noite,iluminacao_ir,Iluminador IR degradado,corretiva,4.0,iluminador IR,noite,nao,SIMULADO
+FSM-SIM-2026-0068,LAC-PP02-F03-A,2026-09-29,Classificação incorreta de eixos,dano_pavimento_cabo,Trilha de roda > 20 mm alterando a indutância,corretiva,1.5,nenhuma (recalibração paliativa),seco,nao,SIMULADO
+FSM-SIM-2026-0069,PFF-K436-OCR-02,2026-10-06,Sessões de cobrança inconsistentes,sincronismo_sistema,Relógio da câmera dessincronizado (NTP),corretiva,1.5,nenhuma (ajuste remoto),—,nao,SIMULADO
+FSM-SIM-2026-0070,CFT-K416-N01,2026-10-14,Imagem esbranquiçada/halo à noite,obstrucao_optica,Teia de aranha na cúpula refletindo o IR,corretiva,2.5,nenhuma,"noite, quente",nao,SIMULADO
+FSM-SIM-2026-0071,CFT-K427-N01,2026-10-20,Imagem tremida e desfocada,vibracao_fixacao,Vibração do poste trincado (substituição pendente),corretiva,2.5,nenhuma,tráfego pesado,sim,SIMULADO
+FSM-SIM-2026-0072,LAC-PP02-F03-A,2026-10-27,Laço sem pulso intermitente,infiltracao_selagem,Selante do corte rompido; infiltração de água,corretiva,5.0,selante epóxi,após chuva,nao,SIMULADO
