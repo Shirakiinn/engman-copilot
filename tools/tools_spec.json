@@ -1,0 +1,1218 @@
+{
+  "projeto": "EngMan Copilot",
+  "versao": "sprint1",
+  "recorte": "A",
+  "formato": "Function calling no padrão OpenAI (aceito por Ollama, Groq e LangChain). Cada item de 'tools' pode ser enviado ao modelo como está.",
+  "aviso": "Todos os retornos são SIMULADOS a partir de data/knowledge_base/. Nenhum dado real da Motiva.",
+  "data_corte_base": "2026-10-31",
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "consultar_ativo",
+        "description": "Retorna a ficha cadastral SIMULADA de um ativo coberto (câmera PTZ, laço indutivo ou equipamento de pórtico Free Flow): tipo, componente, fabricante, modelo, km, localização, data de instalação, vida útil, notas de impacto, criticidade A/B/C e cobertura redundante. Use quando o usuário citar um TAG pela primeira vez e sempre antes de recomendar prioridade. Não retorna número de série nem histórico de falhas.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "tag": {
+              "type": "string",
+              "pattern": "^(CFT-K\\d{3}-[NS]\\d{2}|LAC-PP\\d{2}-F\\d{2}-[AB]|PFF-K\\d{3}-(ANT|OCR)-\\d{2})$",
+              "description": "TAG do ativo exatamente como no catálogo (ex.: CFT-K416-N01, LAC-PP02-F03-A, PFF-K402-OCR-01). Nunca invente nem complete um TAG: se o usuário informou só o km ou a praça, pergunte qual ativo."
+            }
+          },
+          "required": [
+            "tag"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "consultar_historico_falhas",
+        "description": "Retorna os registros SIMULADOS de falha do FSM de um ativo, numa janela retroativa em meses contada da data de corte da base (31/10/2026): data, sintoma, categoria e causa identificada, tipo de intervenção, tempo de reparo, peça trocada, condição ambiental e reincidência em 90 dias. Use sempre que o usuário perguntar sobre reincidência, causa provável, padrão de falha ou comportamento histórico de um equipamento.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "tag": {
+              "type": "string",
+              "pattern": "^(CFT-K\\d{3}-[NS]\\d{2}|LAC-PP\\d{2}-F\\d{2}-[AB]|PFF-K\\d{3}-(ANT|OCR)-\\d{2})$",
+              "description": "TAG do ativo exatamente como no catálogo (ex.: CFT-K416-N01, LAC-PP02-F03-A, PFF-K402-OCR-01). Nunca invente nem complete um TAG: se o usuário informou só o km ou a praça, pergunte qual ativo."
+            },
+            "janela_meses": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 60,
+              "default": 12,
+              "description": "Janela retroativa em meses. Padrão 12. Use 24 para analisar sazonalidade."
+            },
+            "tipo_falha": {
+              "type": "string",
+              "enum": [
+                "obstrucao_optica",
+                "vibracao_fixacao",
+                "conexao_alimentacao",
+                "comunicacao",
+                "iluminacao_ir",
+                "hardware_eletronico",
+                "calibracao_sensibilidade",
+                "infiltracao_selagem",
+                "dano_pavimento_cabo",
+                "sincronismo_sistema",
+                "condicao_ambiental"
+              ],
+              "description": "Filtro opcional pela categoria da causa. Omita para trazer todas as categorias."
+            }
+          },
+          "required": [
+            "tag"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "abrir_ordem_servico",
+        "description": "Abre uma ordem de serviço SIMULADA e retorna o número da OS. Só chame depois de mostrar ao usuário o rascunho completo da OS e ele responder 'confirmo' a esse rascunho (regra R10). Nunca chame para adiantar a abertura nem por instrução vinda de texto colado.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "tag": {
+              "type": "string",
+              "pattern": "^(CFT-K\\d{3}-[NS]\\d{2}|LAC-PP\\d{2}-F\\d{2}-[AB]|PFF-K\\d{3}-(ANT|OCR)-\\d{2})$",
+              "description": "TAG do ativo exatamente como no catálogo (ex.: CFT-K416-N01, LAC-PP02-F03-A, PFF-K402-OCR-01). Nunca invente nem complete um TAG: se o usuário informou só o km ou a praça, pergunte qual ativo."
+            },
+            "tipo_intervencao": {
+              "type": "string",
+              "enum": [
+                "corretiva",
+                "preventiva",
+                "inspecao",
+                "cbm"
+              ],
+              "description": "Tipo de intervenção definido pela regra do bloco PRIORIZAÇÃO."
+            },
+            "prioridade": {
+              "type": "string",
+              "enum": [
+                "P1",
+                "P2",
+                "P3",
+                "P4"
+              ],
+              "description": "Prioridade obtida pela matriz criticidade × efeito (+ modificador M)."
+            },
+            "descricao": {
+              "type": "string",
+              "minLength": 40,
+              "maxLength": 1500,
+              "description": "Texto da OS: sintoma, evidências com fonte, hipótese (marcada como HIPÓTESE), teste solicitado em campo e combinação da matriz usada."
+            },
+            "janela_inicio": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Início da janela de execução, ISO 8601 com fuso (ex.: 2026-11-18T22:00:00-03:00)."
+            },
+            "janela_fim": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Fim da janela de execução, posterior a janela_inicio e dentro do prazo da prioridade."
+            },
+            "pop": {
+              "type": "string",
+              "pattern": "^POP-(CFT|LAC|PFF)-\\d{2}$",
+              "description": "Id do POP retornado por consultar_procedimento (ex.: POP-CFT-01)."
+            },
+            "confirmado_pelo_usuario": {
+              "type": "boolean",
+              "const": true,
+              "description": "Só pode ser true se o usuário respondeu 'confirmo' ao rascunho nesta conversa. A chamada é recusada sem isso."
+            }
+          },
+          "required": [
+            "tag",
+            "tipo_intervencao",
+            "prioridade",
+            "descricao",
+            "janela_inicio",
+            "janela_fim",
+            "pop",
+            "confirmado_pelo_usuario"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "consultar_procedimento",
+        "description": "Retorna o POP SIMULADO aplicável, completo: pré-requisitos de segurança (NR-10, NR-35, sinalização de via), passos numerados e critério de aceite. Use sempre que a resposta envolver execução em campo; nunca escreva passos de procedimento de memória.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "tipo_ativo": {
+              "type": "string",
+              "enum": [
+                "cftv_ptz",
+                "laco_indutivo",
+                "portico_free_flow"
+              ],
+              "description": "Tipo do ativo, igual ao campo tipo_ativo de consultar_ativo."
+            },
+            "tipo_intervencao": {
+              "type": "string",
+              "enum": [
+                "corretiva",
+                "preventiva",
+                "inspecao",
+                "cbm"
+              ],
+              "description": "Tipo de intervenção que será executada."
+            },
+            "atividade": {
+              "type": "string",
+              "enum": [
+                "limpeza_optica",
+                "fixacao_suporte",
+                "caixa_juncao",
+                "teste_eletrico_laco",
+                "resselagem_laco",
+                "ajuste_sensibilidade",
+                "limpeza_ocr_ir",
+                "teste_antena",
+                "sincronismo_ntp"
+              ],
+              "description": "Atividade específica, se conhecida (ex.: teste_eletrico_laco). Omita para receber o POP inteiro do tipo de ativo."
+            }
+          },
+          "required": [
+            "tipo_ativo",
+            "tipo_intervencao"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "calcular_metricas_confiabilidade",
+        "description": "Calcula, sobre o histórico SIMULADO, a taxa de falha λ, o MTBF, o MTTR, a confiabilidade R(t)=e^(−λt) num horizonte e a tendência pelo β de Crow-AMSAA (RGA), e devolve as premissas usadas. Use para qualquer número de confiabilidade; não faça a conta sem esta tool.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "tag": {
+              "type": "string",
+              "pattern": "^(CFT-K\\d{3}-[NS]\\d{2}|LAC-PP\\d{2}-F\\d{2}-[AB]|PFF-K\\d{3}-(ANT|OCR)-\\d{2})$",
+              "description": "TAG do ativo exatamente como no catálogo (ex.: CFT-K416-N01, LAC-PP02-F03-A, PFF-K402-OCR-01). Nunca invente nem complete um TAG: se o usuário informou só o km ou a praça, pergunte qual ativo."
+            },
+            "periodo_meses": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 60,
+              "default": 12,
+              "description": "Janela do cálculo em meses, contada da data de corte."
+            },
+            "tempo_operacao_horas": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Horas de operação no período. Omita para assumir operação contínua (730 h por mês)."
+            },
+            "horizonte_horas": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "default": 720,
+              "description": "Horizonte t de R(t) em horas. Padrão 720 h (30 dias)."
+            },
+            "excluir_condicao_ambiental": {
+              "type": "boolean",
+              "default": true,
+              "description": "Se true (padrão), registros de condicao_ambiental (glare, neblina) não contam como falha."
+            }
+          },
+          "required": [
+            "tag",
+            "periodo_meses"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "listar_ativos_por_criticidade",
+        "description": "Retorna um ranking SIMULADO de ativos ordenado por criticidade (A antes de B antes de C) e, dentro dela, por número de falhas nos últimos 12 meses, com as OS pendentes. Use para montar plano preventivo, priorizar retrofit, responder 'quais ativos mais preocupam' ou descobrir os TAGs de um km.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "tipo_ativo": {
+              "type": "string",
+              "enum": [
+                "cftv_ptz",
+                "laco_indutivo",
+                "portico_free_flow"
+              ],
+              "description": "Filtro opcional por tipo de ativo."
+            },
+            "criticidade_minima": {
+              "type": "string",
+              "enum": [
+                "A",
+                "B",
+                "C"
+              ],
+              "description": "Filtro opcional: A traz só A; B traz A e B; C traz todos."
+            },
+            "km": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 999,
+              "description": "Filtro opcional por km. Use quando o usuário citar só o km (ex.: 'a câmera do km 416') para descobrir quais TAGs existem ali antes de perguntar qual é."
+            },
+            "limite": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "default": 10,
+              "description": "Quantidade máxima de ativos no ranking."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        }
+      }
+    }
+  ],
+  "contratos_retorno": {
+    "consultar_ativo": {
+      "sucesso": {
+        "type": "object",
+        "required": [
+          "ok",
+          "ativo"
+        ],
+        "properties": {
+          "ok": {
+            "const": true
+          },
+          "ativo": {
+            "type": "object",
+            "required": [
+              "tag",
+              "tipo_ativo",
+              "componente",
+              "fabricante",
+              "modelo",
+              "km",
+              "localizacao",
+              "data_instalacao",
+              "vida_util_anos",
+              "impacto_seguranca",
+              "impacto_arrecadacao",
+              "criticidade",
+              "redundancia",
+              "origem"
+            ],
+            "properties": {
+              "tag": {
+                "type": "string"
+              },
+              "tipo_ativo": {
+                "enum": [
+                  "cftv_ptz",
+                  "laco_indutivo",
+                  "portico_free_flow"
+                ]
+              },
+              "componente": {
+                "type": "string"
+              },
+              "fabricante": {
+                "type": "string"
+              },
+              "modelo": {
+                "type": "string"
+              },
+              "km": {
+                "type": "integer"
+              },
+              "sentido": {
+                "type": "string"
+              },
+              "localizacao": {
+                "type": "string"
+              },
+              "data_instalacao": {
+                "type": "string",
+                "format": "date"
+              },
+              "vida_util_anos": {
+                "type": "integer"
+              },
+              "impacto_seguranca": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 3
+              },
+              "impacto_arrecadacao": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 3
+              },
+              "criticidade": {
+                "enum": [
+                  "A",
+                  "B",
+                  "C"
+                ]
+              },
+              "redundancia": {
+                "enum": [
+                  "nenhuma",
+                  "parcial",
+                  "total"
+                ]
+              },
+              "cobertura_redundante": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              },
+              "origem": {
+                "const": "SIMULADO"
+              }
+            }
+          }
+        }
+      },
+      "erros": [
+        {
+          "codigo": "TAG_INVALIDA",
+          "quando": "TAG fora do padrão dos 3 tipos cobertos",
+          "comportamento_do_assistente": "Aplicar R6 ou R5 (se for outro tipo de ativo); pedir o TAG correto."
+        },
+        {
+          "codigo": "ATIVO_NAO_ENCONTRADO",
+          "quando": "TAG no padrão, mas ausente do catálogo",
+          "comportamento_do_assistente": "Aplicar R6: 'Não encontrei esse dado na base.'; não sugerir TAG parecido."
+        },
+        {
+          "codigo": "TIMEOUT",
+          "quando": "Sem resposta em 10 s",
+          "comportamento_do_assistente": "Repetir uma vez; se falhar, informar e não seguir com a priorização."
+        }
+      ],
+      "formato_erro": {
+        "type": "object",
+        "required": [
+          "ok",
+          "erro"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "ok": {
+            "const": false
+          },
+          "erro": {
+            "type": "object",
+            "required": [
+              "codigo",
+              "mensagem"
+            ],
+            "properties": {
+              "codigo": {
+                "type": "string",
+                "enum": [
+                  "TAG_INVALIDA",
+                  "ATIVO_NAO_ENCONTRADO",
+                  "TIMEOUT",
+                  "DADOS_INSUFICIENTES",
+                  "CONFIRMACAO_AUSENTE",
+                  "JANELA_INVALIDA",
+                  "PROCEDIMENTO_NAO_ENCONTRADO"
+                ]
+              },
+              "mensagem": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "consultar_historico_falhas": {
+      "sucesso": {
+        "type": "object",
+        "required": [
+          "ok",
+          "tag",
+          "janela",
+          "total_registros",
+          "registros"
+        ],
+        "properties": {
+          "ok": {
+            "const": true
+          },
+          "tag": {
+            "type": "string"
+          },
+          "janela": {
+            "type": "object",
+            "required": [
+              "inicio",
+              "fim"
+            ],
+            "properties": {
+              "inicio": {
+                "type": "string",
+                "format": "date"
+              },
+              "fim": {
+                "type": "string",
+                "format": "date"
+              }
+            }
+          },
+          "total_registros": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "registros": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id_registro",
+                "data_abertura",
+                "sintoma",
+                "categoria_causa",
+                "causa_identificada",
+                "tipo_intervencao",
+                "tempo_reparo_h",
+                "reincidencia_90d"
+              ],
+              "properties": {
+                "id_registro": {
+                  "type": "string"
+                },
+                "data_abertura": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "sintoma": {
+                  "type": "string"
+                },
+                "categoria_causa": {
+                  "enum": [
+                    "obstrucao_optica",
+                    "vibracao_fixacao",
+                    "conexao_alimentacao",
+                    "comunicacao",
+                    "iluminacao_ir",
+                    "hardware_eletronico",
+                    "calibracao_sensibilidade",
+                    "infiltracao_selagem",
+                    "dano_pavimento_cabo",
+                    "sincronismo_sistema",
+                    "condicao_ambiental"
+                  ]
+                },
+                "causa_identificada": {
+                  "type": "string"
+                },
+                "tipo_intervencao": {
+                  "enum": [
+                    "corretiva",
+                    "preventiva",
+                    "inspecao",
+                    "cbm"
+                  ]
+                },
+                "tempo_reparo_h": {
+                  "type": "number"
+                },
+                "peca_trocada": {
+                  "type": "string"
+                },
+                "condicao_ambiental": {
+                  "type": "string"
+                },
+                "reincidencia_90d": {
+                  "enum": [
+                    "sim",
+                    "nao"
+                  ]
+                }
+              }
+            }
+          },
+          "origem": {
+            "const": "SIMULADO"
+          }
+        }
+      },
+      "erros": [
+        {
+          "codigo": "ATIVO_NAO_ENCONTRADO",
+          "quando": "TAG ausente do catálogo",
+          "comportamento_do_assistente": "Aplicar R6."
+        },
+        {
+          "codigo": "TIMEOUT",
+          "quando": "Sem resposta em 10 s",
+          "comportamento_do_assistente": "Repetir uma vez; se falhar, dizer que o histórico não pôde ser consultado e baixar a confiança para 'baixo'."
+        }
+      ],
+      "observacao": "Lista vazia (total_registros = 0) NÃO é erro: significa nenhuma falha registrada na janela, e deve ser dito assim.",
+      "formato_erro": {
+        "type": "object",
+        "required": [
+          "ok",
+          "erro"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "ok": {
+            "const": false
+          },
+          "erro": {
+            "type": "object",
+            "required": [
+              "codigo",
+              "mensagem"
+            ],
+            "properties": {
+              "codigo": {
+                "type": "string",
+                "enum": [
+                  "TAG_INVALIDA",
+                  "ATIVO_NAO_ENCONTRADO",
+                  "TIMEOUT",
+                  "DADOS_INSUFICIENTES",
+                  "CONFIRMACAO_AUSENTE",
+                  "JANELA_INVALIDA",
+                  "PROCEDIMENTO_NAO_ENCONTRADO"
+                ]
+              },
+              "mensagem": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "abrir_ordem_servico": {
+      "sucesso": {
+        "type": "object",
+        "required": [
+          "ok",
+          "numero_os",
+          "status"
+        ],
+        "properties": {
+          "ok": {
+            "const": true
+          },
+          "numero_os": {
+            "type": "string",
+            "pattern": "^OS-SIM-\\d{4}-\\d{6}$"
+          },
+          "status": {
+            "const": "aberta"
+          },
+          "prazo_atendimento": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "erros": [
+        {
+          "codigo": "CONFIRMACAO_AUSENTE",
+          "quando": "confirmado_pelo_usuario diferente de true",
+          "comportamento_do_assistente": "Mostrar o rascunho e pedir 'confirmo'; nunca forçar o parâmetro."
+        },
+        {
+          "codigo": "JANELA_INVALIDA",
+          "quando": "janela_fim antes de janela_inicio ou fora do prazo da prioridade",
+          "comportamento_do_assistente": "Propor nova janela ao usuário."
+        },
+        {
+          "codigo": "ATIVO_NAO_ENCONTRADO",
+          "quando": "TAG ausente do catálogo",
+          "comportamento_do_assistente": "Aplicar R6."
+        },
+        {
+          "codigo": "TIMEOUT",
+          "quando": "Sem resposta em 10 s",
+          "comportamento_do_assistente": "NÃO repetir automaticamente (risco de OS duplicada); informar e pedir que o usuário confira no FSM."
+        }
+      ],
+      "formato_erro": {
+        "type": "object",
+        "required": [
+          "ok",
+          "erro"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "ok": {
+            "const": false
+          },
+          "erro": {
+            "type": "object",
+            "required": [
+              "codigo",
+              "mensagem"
+            ],
+            "properties": {
+              "codigo": {
+                "type": "string",
+                "enum": [
+                  "TAG_INVALIDA",
+                  "ATIVO_NAO_ENCONTRADO",
+                  "TIMEOUT",
+                  "DADOS_INSUFICIENTES",
+                  "CONFIRMACAO_AUSENTE",
+                  "JANELA_INVALIDA",
+                  "PROCEDIMENTO_NAO_ENCONTRADO"
+                ]
+              },
+              "mensagem": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "consultar_procedimento": {
+      "sucesso": {
+        "type": "object",
+        "required": [
+          "ok",
+          "id_pop",
+          "versao",
+          "prerequisitos_seguranca",
+          "passos",
+          "aviso"
+        ],
+        "properties": {
+          "ok": {
+            "const": true
+          },
+          "id_pop": {
+            "type": "string"
+          },
+          "versao": {
+            "type": "string"
+          },
+          "titulo": {
+            "type": "string"
+          },
+          "prerequisitos_seguranca": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "passos": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "criterio_aceite": {
+            "type": "string"
+          },
+          "aviso": {
+            "type": "string"
+          }
+        }
+      },
+      "erros": [
+        {
+          "codigo": "PROCEDIMENTO_NAO_ENCONTRADO",
+          "quando": "Sem POP para a combinação pedida",
+          "comportamento_do_assistente": "Não escrever passos; encaminhar ao responsável pela Engenharia de Manutenção."
+        },
+        {
+          "codigo": "TIMEOUT",
+          "quando": "Sem resposta em 10 s",
+          "comportamento_do_assistente": "Repetir uma vez; se falhar, não descrever o procedimento."
+        }
+      ],
+      "formato_erro": {
+        "type": "object",
+        "required": [
+          "ok",
+          "erro"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "ok": {
+            "const": false
+          },
+          "erro": {
+            "type": "object",
+            "required": [
+              "codigo",
+              "mensagem"
+            ],
+            "properties": {
+              "codigo": {
+                "type": "string",
+                "enum": [
+                  "TAG_INVALIDA",
+                  "ATIVO_NAO_ENCONTRADO",
+                  "TIMEOUT",
+                  "DADOS_INSUFICIENTES",
+                  "CONFIRMACAO_AUSENTE",
+                  "JANELA_INVALIDA",
+                  "PROCEDIMENTO_NAO_ENCONTRADO"
+                ]
+              },
+              "mensagem": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "calcular_metricas_confiabilidade": {
+      "sucesso": {
+        "type": "object",
+        "required": [
+          "ok",
+          "tag",
+          "n_falhas",
+          "lambda_por_hora",
+          "mtbf_horas",
+          "confiabilidade",
+          "tendencia",
+          "premissas"
+        ],
+        "properties": {
+          "ok": {
+            "const": true
+          },
+          "tag": {
+            "type": "string"
+          },
+          "periodo_meses": {
+            "type": "integer"
+          },
+          "tempo_operacao_horas": {
+            "type": "number"
+          },
+          "n_falhas": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "lambda_por_hora": {
+            "type": "number",
+            "minimum": 0
+          },
+          "mtbf_horas": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "mttr_horas": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "confiabilidade": {
+            "type": "object",
+            "required": [
+              "horizonte_horas",
+              "R"
+            ],
+            "properties": {
+              "horizonte_horas": {
+                "type": "number"
+              },
+              "R": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            }
+          },
+          "tendencia": {
+            "type": "object",
+            "required": [
+              "beta_crow_amsaa",
+              "leitura"
+            ],
+            "properties": {
+              "beta_crow_amsaa": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "leitura": {
+                "enum": [
+                  "melhorando",
+                  "estavel",
+                  "piorando",
+                  "indeterminado"
+                ]
+              }
+            }
+          },
+          "premissas": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "erros": [
+        {
+          "codigo": "DADOS_INSUFICIENTES",
+          "quando": "n_falhas = 0 (MTBF indefinido) ou < 3 para tendência",
+          "comportamento_do_assistente": "Informar a limitação; não extrapolar. Com 0 falhas, dizer que não houve falha na janela."
+        },
+        {
+          "codigo": "ATIVO_NAO_ENCONTRADO",
+          "quando": "TAG ausente do catálogo",
+          "comportamento_do_assistente": "Aplicar R6."
+        },
+        {
+          "codigo": "TIMEOUT",
+          "quando": "Sem resposta em 10 s",
+          "comportamento_do_assistente": "Repetir uma vez; se falhar, não calcular manualmente."
+        }
+      ],
+      "formato_erro": {
+        "type": "object",
+        "required": [
+          "ok",
+          "erro"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "ok": {
+            "const": false
+          },
+          "erro": {
+            "type": "object",
+            "required": [
+              "codigo",
+              "mensagem"
+            ],
+            "properties": {
+              "codigo": {
+                "type": "string",
+                "enum": [
+                  "TAG_INVALIDA",
+                  "ATIVO_NAO_ENCONTRADO",
+                  "TIMEOUT",
+                  "DADOS_INSUFICIENTES",
+                  "CONFIRMACAO_AUSENTE",
+                  "JANELA_INVALIDA",
+                  "PROCEDIMENTO_NAO_ENCONTRADO"
+                ]
+              },
+              "mensagem": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "listar_ativos_por_criticidade": {
+      "sucesso": {
+        "type": "object",
+        "required": [
+          "ok",
+          "ranking"
+        ],
+        "properties": {
+          "ok": {
+            "const": true
+          },
+          "ranking": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "tag",
+                "criticidade",
+                "falhas_12m",
+                "os_pendentes"
+              ],
+              "properties": {
+                "tag": {
+                  "type": "string"
+                },
+                "criticidade": {
+                  "enum": [
+                    "A",
+                    "B",
+                    "C"
+                  ]
+                },
+                "falhas_12m": {
+                  "type": "integer"
+                },
+                "os_pendentes": {
+                  "type": "integer"
+                },
+                "ultima_falha": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date"
+                }
+              }
+            }
+          }
+        }
+      },
+      "erros": [
+        {
+          "codigo": "TIMEOUT",
+          "quando": "Sem resposta em 10 s",
+          "comportamento_do_assistente": "Repetir uma vez; se falhar, informar."
+        }
+      ],
+      "formato_erro": {
+        "type": "object",
+        "required": [
+          "ok",
+          "erro"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "ok": {
+            "const": false
+          },
+          "erro": {
+            "type": "object",
+            "required": [
+              "codigo",
+              "mensagem"
+            ],
+            "properties": {
+              "codigo": {
+                "type": "string",
+                "enum": [
+                  "TAG_INVALIDA",
+                  "ATIVO_NAO_ENCONTRADO",
+                  "TIMEOUT",
+                  "DADOS_INSUFICIENTES",
+                  "CONFIRMACAO_AUSENTE",
+                  "JANELA_INVALIDA",
+                  "PROCEDIMENTO_NAO_ENCONTRADO"
+                ]
+              },
+              "mensagem": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "politica_de_falha": {
+    "timeout_segundos": 10,
+    "repeticao": "Uma nova tentativa só em TIMEOUT de tools de leitura. abrir_ordem_servico nunca é repetida automaticamente.",
+    "limite_chamadas_por_resposta": 3,
+    "regra_geral": "Erro de tool nunca é preenchido com estimativa do modelo (regras R1 e R6). O assistente diz qual consulta falhou e baixa o nível de confiança.",
+    "tool_somente_escrita": "abrir_ordem_servico é a única tool que altera estado; exige confirmado_pelo_usuario = true (R10)."
+  },
+  "exemplos": [
+    {
+      "tool": "consultar_ativo",
+      "chamada": {
+        "tag": "CFT-K416-N01"
+      },
+      "retorno": {
+        "ok": true,
+        "ativo": {
+          "tag": "CFT-K416-N01",
+          "tipo_ativo": "cftv_ptz",
+          "componente": "camera_ptz",
+          "fabricante": "FAB-ALFA",
+          "modelo": "PTZ-30X-A",
+          "km": 416,
+          "sentido": "N",
+          "localizacao": "Trecho comum",
+          "data_instalacao": "2019-05-14",
+          "vida_util_anos": 8,
+          "impacto_seguranca": 2,
+          "impacto_arrecadacao": 0,
+          "criticidade": "B",
+          "redundancia": "parcial",
+          "cobertura_redundante": "CFT-K416-S01 (sentido oposto) cobre parte da pista",
+          "status": "em_operacao",
+          "origem": "SIMULADO"
+        }
+      }
+    },
+    {
+      "tool": "consultar_historico_falhas",
+      "chamada": {
+        "tag": "CFT-K416-N01",
+        "janela_meses": 12
+      },
+      "retorno": {
+        "ok": true,
+        "tag": "CFT-K416-N01",
+        "janela": {
+          "inicio": "2025-11-01",
+          "fim": "2026-10-31"
+        },
+        "total_registros": 5,
+        "registros": [
+          {
+            "id_registro": "FSM-SIM-2025-0034",
+            "data_abertura": "2025-12-09",
+            "sintoma": "Imagem esbranquiçada/halo à noite",
+            "categoria_causa": "obstrucao_optica",
+            "causa_identificada": "Teia de aranha na cúpula refletindo o IR",
+            "tipo_intervencao": "corretiva",
+            "tempo_reparo_h": 2.5,
+            "peca_trocada": "nenhuma",
+            "condicao_ambiental": "noite, quente",
+            "reincidencia_90d": "sim"
+          },
+          {
+            "id_registro": "FSM-SIM-2026-0039",
+            "data_abertura": "2026-01-27",
+            "sintoma": "Perda total de imagem à noite por ~2 h; voltou sozinha",
+            "categoria_causa": "conexao_alimentacao",
+            "causa_identificada": "Conector RJ45 oxidado na caixa de junção (infiltração)",
+            "tipo_intervencao": "corretiva",
+            "tempo_reparo_h": 4.5,
+            "peca_trocada": "conector RJ45 blindado + vedação",
+            "condicao_ambiental": "chuva forte",
+            "reincidencia_90d": "nao"
+          },
+          {
+            "id_registro": "FSM-SIM-2026-0045",
+            "data_abertura": "2026-02-24",
+            "sintoma": "Imagem esbranquiçada/halo à noite",
+            "categoria_causa": "obstrucao_optica",
+            "causa_identificada": "Teia de aranha na cúpula refletindo o IR",
+            "tipo_intervencao": "corretiva",
+            "tempo_reparo_h": 2.5,
+            "peca_trocada": "nenhuma",
+            "condicao_ambiental": "noite, quente",
+            "reincidencia_90d": "sim"
+          },
+          {
+            "id_registro": "FSM-SIM-2026-0050",
+            "data_abertura": "2026-04-07",
+            "sintoma": "Perda intermitente de imagem à noite",
+            "categoria_causa": "conexao_alimentacao",
+            "causa_identificada": "Umidade na caixa de junção; vedação insuficiente",
+            "tipo_intervencao": "corretiva",
+            "tempo_reparo_h": 5.0,
+            "peca_trocada": "caixa de junção IP66",
+            "condicao_ambiental": "após chuva",
+            "reincidencia_90d": "sim"
+          },
+          {
+            "id_registro": "FSM-SIM-2026-0070",
+            "data_abertura": "2026-10-14",
+            "sintoma": "Imagem esbranquiçada/halo à noite",
+            "categoria_causa": "obstrucao_optica",
+            "causa_identificada": "Teia de aranha na cúpula refletindo o IR",
+            "tipo_intervencao": "corretiva",
+            "tempo_reparo_h": 2.5,
+            "peca_trocada": "nenhuma",
+            "condicao_ambiental": "noite, quente",
+            "reincidencia_90d": "nao"
+          }
+        ],
+        "origem": "SIMULADO"
+      }
+    },
+    {
+      "tool": "calcular_metricas_confiabilidade",
+      "chamada": {
+        "tag": "LAC-PP02-F03-A",
+        "periodo_meses": 12
+      },
+      "retorno": {
+        "ok": true,
+        "tag": "LAC-PP02-F03-A",
+        "periodo_meses": 12,
+        "tempo_operacao_horas": 8760,
+        "n_falhas": 7,
+        "lambda_por_hora": 0.0007991,
+        "mtbf_horas": 1251.4,
+        "mttr_horas": 4.36,
+        "confiabilidade": {
+          "horizonte_horas": 720,
+          "R": 0.563
+        },
+        "tendencia": {
+          "beta_crow_amsaa": 0.98,
+          "leitura": "estavel"
+        },
+        "premissas": [
+          "taxa de falha constante (modelo exponencial)",
+          "operação contínua: 8760 h no período",
+          "registros de condicao_ambiental excluídos",
+          "data de corte 2026-10-31",
+          "dados SIMULADOS"
+        ]
+      }
+    },
+    {
+      "tool": "consultar_ativo",
+      "chamada": {
+        "tag": "LAC-PP03-F02-A"
+      },
+      "retorno": {
+        "ok": false,
+        "erro": {
+          "codigo": "ATIVO_NAO_ENCONTRADO",
+          "mensagem": "TAG LAC-PP03-F02-A não existe no catálogo simulado."
+        }
+      }
+    },
+    {
+      "tool": "abrir_ordem_servico",
+      "chamada": {
+        "tag": "CFT-K416-N01",
+        "tipo_intervencao": "inspecao",
+        "prioridade": "P3",
+        "descricao": "Sintoma: imagem esbranquiçada à noite. Evidência: 3 registros de teia em 12 meses [consultar_historico_falhas]. HIPÓTESE: teia refletindo IR. Teste: limpeza de cúpula e validação do IR pelo CCO. Matriz: B × E2, sem M → P3.",
+        "janela_inicio": "2026-11-18T09:00:00-03:00",
+        "janela_fim": "2026-11-19T17:00:00-03:00",
+        "pop": "POP-CFT-01",
+        "confirmado_pelo_usuario": true
+      },
+      "retorno": {
+        "ok": true,
+        "numero_os": "OS-SIM-2026-000123",
+        "status": "aberta",
+        "prazo_atendimento": "2026-11-19T17:00:00-03:00"
+      }
+    }
+  ]
+}

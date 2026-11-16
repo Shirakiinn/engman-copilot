@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1470" viewBox="0 0 1500 1470" font-family="Roboto, DejaVu Sans, sans-serif">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3B4A5A"/></marker></defs>
+<rect width="1500" height="1470" fill="#FFFFFF"/>
+<text x="30" y="46" font-size="26" font-weight="700" fill="#1E2329">EngMan Copilot — arquitetura da solução</text>
+<text x="30" y="74" font-size="15" fill="#555">Recorte A · Diagnóstico e Confiabilidade · persona: engenheiro de manutenção · ativos: CFTV PTZ, laços indutivos, pórticos Free Flow · dados SIMULADOS</text>
+<rect x="360" y="100" width="500" height="100" rx="12" fill="#EEF2F7" stroke="#3B4A5A" stroke-width="2.2"/>
+<text x="376" y="129" font-size="18" font-weight="700" fill="#3B4A5A">① Entrada</text>
+<text x="376" y="156" font-size="15" fill="#1E2329">Engenheiro de manutenção · chat em texto livre (Gradio)</text>
+<text x="376" y="180" font-size="15" fill="#1E2329">ex.: “CFT-K416-N01 com halo à noite desde ontem”</text>
+<rect x="360" y="240" width="500" height="160" rx="12" fill="#FFF4E0" stroke="#B86E00" stroke-width="2.2"/>
+<text x="376" y="269" font-size="18" font-weight="700" fill="#B86E00">② Guardrail de entrada — código, antes do LLM</text>
+<text x="376" y="296" font-size="15" fill="#1E2329">• Mascara placa e CPF por regex → [PLACA]</text>
+<text x="376" y="320" font-size="15" fill="#1E2329">• Marca padrão de injection (“ignore as instruções…”)</text>
+<text x="376" y="344" font-size="15" fill="#1E2329">• Sinaliza pedido perigoso (energizado, altura, laudo)</text>
+<text x="376" y="368" font-size="15" fill="#1E2329">• Ativo fora do recorte (PMV, SAT, callbox…) → recusa</text>
+<rect x="360" y="440" width="500" height="200" rx="12" fill="#EEF0FF" stroke="#4B57B8" stroke-width="2.2"/>
+<text x="376" y="469" font-size="18" font-weight="700" fill="#4B57B8">③ Montagem do contexto — montar_prompt()</text>
+<text x="376" y="496" font-size="15" fill="#1E2329">• System prompt sp-v1.1: 10 blocos, regras R1–R12</text>
+<text x="376" y="520" font-size="15" fill="#1E2329">• Contrato das 6 tools (JSON Schema)</text>
+<text x="376" y="544" font-size="15" fill="#1E2329">• TAG ativo + resumo da conversa</text>
+<text x="376" y="568" font-size="15" fill="#1E2329">• Últimas 6 trocas do histórico</text>
+<text x="376" y="592" font-size="15" fill="#1E2329">• RAG: até 4 trechos do ChromaDB, com id da fonte</text>
+<text x="376" y="616" font-size="15" fill="#1E2329">• Resultados de tools deste turno (+ flags do ②)</text>
+<rect x="360" y="680" width="500" height="128" rx="12" fill="#E3F0FB" stroke="#1F6FB2" stroke-width="2.2"/>
+<text x="376" y="709" font-size="18" font-weight="700" fill="#1F6FB2">④ Chamada ao LLM</text>
+<text x="376" y="736" font-size="15" fill="#1E2329">Qwen 2.5 7B Instruct · Ollama local · dado não sai da máquina</text>
+<text x="376" y="760" font-size="14" fill="#1E2329">temperature 0.2 · top_p 0.9 · max_tokens 700 · num_ctx 16384</text>
+<text x="376" y="784" font-size="14" fill="#1E2329">Alternativa gratuita: Groq ou Gemini (free tier), só dado simulado</text>
+<polygon points="610,843 825,915 610,987 395,915" fill="#F4F4F4" stroke="#555555" stroke-width="2.2"/>
+<text x="610" y="907" font-size="17" font-weight="700" fill="#333" text-anchor="middle">⑤ Decisão de tool</text>
+<text x="610" y="932" font-size="15" fill="#1E2329" text-anchor="middle">precisa de dado de tool ou da base?</text>
+<rect x="360" y="1035" width="500" height="200" rx="12" fill="#FFF4E0" stroke="#B86E00" stroke-width="2.2"/>
+<text x="376" y="1064" font-size="18" font-weight="700" fill="#B86E00">⑦ Guardrail de saída — verificação em código</text>
+<text x="376" y="1091" font-size="15" fill="#1E2329">• Todo TAG citado existe no catálogo?</text>
+<text x="376" y="1115" font-size="15" fill="#1E2329">• Todo número veio de tool ou de documento citado?</text>
+<text x="376" y="1139" font-size="15" fill="#1E2329">• Nº de OS só se abrir_ordem_servico retornou</text>
+<text x="376" y="1163" font-size="15" fill="#1E2329">• Tem FATO × HIPÓTESE e “Nível de confiança”?</text>
+<text x="376" y="1187" font-size="15" fill="#1E2329">• Sem placa e sem trecho do system prompt?</text>
+<text x="376" y="1211" font-size="14" fill="#1E2329">Falhou → 1 nova geração; falhou de novo → resposta segura</text>
+<rect x="360" y="1275" width="500" height="128" rx="12" fill="#EEF2F7" stroke="#3B4A5A" stroke-width="2.2"/>
+<text x="376" y="1304" font-size="18" font-weight="700" fill="#3B4A5A">⑧ Resposta + histórico</text>
+<text x="376" y="1331" font-size="15" fill="#1E2329">TAG ativo · FATOS [fonte] · HIPÓTESES · Recomendação</text>
+<text x="376" y="1355" font-size="15" fill="#1E2329">(intervenção + prioridade A×E2→P2) · Nível de confiança</text>
+<text x="376" y="1379" font-size="14" fill="#1E2329">Grava o turno já mascarado; resumo a cada 6 trocas</text>
+<rect x="950" y="430" width="520" height="165" rx="12" fill="#F6F6F6" stroke="#7A7A7A" stroke-width="2.2" stroke-dasharray="7 5"/>
+<text x="966" y="459" font-size="18" font-weight="700" fill="#7A7A7A">Base de conhecimento — ChromaDB (RAG)</text>
+<text x="966" y="486" font-size="15" fill="#1E2329">plano preventivo · fichas técnicas · normas (resumo)</text>
+<text x="966" y="510" font-size="15" fill="#1E2329">glossário · briefing Motiva · boletins de campo</text>
+<text x="966" y="534" font-size="14" fill="#1E2329">embeddings multilingual-e5-base · chunks ≤ 450 tokens</text>
+<text x="966" y="558" font-size="14" fill="#1E2329">filtro: tipo_ativo, tipo_documento, versão vigente</text>
+<rect x="950" y="838" width="520" height="200" rx="12" fill="#E7F6EE" stroke="#1F7F52" stroke-width="2.2"/>
+<text x="966" y="867" font-size="18" font-weight="700" fill="#1F7F52">⑥ Execução da tool (retornos simulados)</text>
+<text x="966" y="894" font-size="14" fill="#1E2329" font-family="DejaVu Sans Mono">consultar_ativo · consultar_historico_falhas</text>
+<text x="966" y="918" font-size="14" fill="#1E2329" font-family="DejaVu Sans Mono">consultar_procedimento (POP inteiro, segurança 1º)</text>
+<text x="966" y="942" font-size="14" fill="#1E2329" font-family="DejaVu Sans Mono">calcular_metricas_confiabilidade (λ, MTBF, R(t), β)</text>
+<text x="966" y="966" font-size="14" fill="#1E2329" font-family="DejaVu Sans Mono">listar_ativos_por_criticidade</text>
+<text x="966" y="990" font-size="14" fill="#1E2329" font-family="DejaVu Sans Mono">abrir_ordem_servico → só após “confirmo” do usuário</text>
+<text x="966" y="1014" font-size="14" fill="#1E2329">Erro/timeout: 1 nova tentativa (leitura) · nunca inventa</text>
+<rect x="950" y="1095" width="520" height="128" rx="12" fill="#F6F6F6" stroke="#7A7A7A" stroke-width="2.2" stroke-dasharray="7 5"/>
+<text x="966" y="1124" font-size="18" font-weight="700" fill="#7A7A7A">Sistemas simulados (data/knowledge_base)</text>
+<text x="966" y="1151" font-size="15" fill="#1E2329">catálogo de ativos (32) · histórico FSM (72 registros)</text>
+<text x="966" y="1175" font-size="15" fill="#1E2329">POPs (3) · ordens de serviço (OS-SIM-…)</text>
+<text x="966" y="1199" font-size="14" fill="#1E2329">Fonte única por dado: o que vem por tool não vai ao RAG</text>
+<rect x="30" y="255" width="300" height="130" rx="12" fill="#FCEBEB" stroke="#A83232" stroke-width="2.2"/>
+<text x="46" y="284" font-size="18" font-weight="700" fill="#A83232">Recusa direta</text>
+<text x="46" y="311" font-size="15" fill="#1E2329">sem chamar o LLM:</text>
+<text x="46" y="335" font-size="15" fill="#1E2329">ativo fora do recorte → R5</text>
+<text x="46" y="359" font-size="14" fill="#1E2329">demais alertas viram flag ③</text>
+<rect x="80" y="450" width="250" height="150" rx="12" fill="#F6F6F6" stroke="#7A7A7A" stroke-width="2.2" stroke-dasharray="7 5"/>
+<text x="96" y="479" font-size="18" font-weight="700" fill="#7A7A7A">Histórico da conversa</text>
+<text x="96" y="506" font-size="15" fill="#1E2329">últimas 6 trocas</text>
+<text x="96" y="530" font-size="15" fill="#1E2329">resumo das anteriores</text>
+<text x="96" y="554" font-size="15" fill="#1E2329">TAG ativo</text>
+<path d="M610,200 V238" fill="none" stroke="#3B4A5A" stroke-width="2.4" marker-end="url(#a)"/>
+<path d="M610,400 V438" fill="none" stroke="#3B4A5A" stroke-width="2.4" marker-end="url(#a)"/>
+<path d="M610,640 V678" fill="none" stroke="#3B4A5A" stroke-width="2.4" marker-end="url(#a)"/>
+<path d="M610,808 V841" fill="none" stroke="#3B4A5A" stroke-width="2.4" marker-end="url(#a)"/>
+<path d="M610,987 V1033" fill="none" stroke="#3B4A5A" stroke-width="2.4" marker-end="url(#a)"/>
+<text x="622" y="1017" font-size="14" font-weight="700" fill="#3B4A5A" text-anchor="start">Não</text>
+<path d="M610,1235 V1273" fill="none" stroke="#3B4A5A" stroke-width="2.4" marker-end="url(#a)"/>
+<path d="M825,915 H948" fill="none" stroke="#3B4A5A" stroke-width="2.4" marker-end="url(#a)"/>
+<text x="845" y="905" font-size="14" font-weight="700" fill="#3B4A5A" text-anchor="start">Sim</text>
+<path d="M1210,838 V620 H862" fill="none" stroke="#3B4A5A" stroke-width="2.4" marker-end="url(#a)"/>
+<text x="1198" y="700" font-size="14" font-weight="700" fill="#1F7F52" text-anchor="end">reinjeta o retorno no contexto</text>
+<text x="1198" y="720" font-size="14" font-weight="700" fill="#1F7F52" text-anchor="end">→ nova chamada (máx. 3 por resposta)</text>
+<path d="M950,512 H862" fill="none" stroke="#7A7A7A" stroke-width="2.4" stroke-dasharray="6 5" marker-end="url(#a)"/>
+<text x="905" y="540" font-size="13" font-weight="700" fill="#7A7A7A" text-anchor="middle">top-4</text>
+<text x="905" y="557" font-size="13" font-weight="700" fill="#7A7A7A" text-anchor="middle">trechos</text>
+<path d="M1210,1095 V1040" fill="none" stroke="#7A7A7A" stroke-width="2.4" stroke-dasharray="6 5" marker-end="url(#a)"/>
+<text x="1222" y="1072" font-size="14" font-weight="700" fill="#7A7A7A" text-anchor="start">lê / grava OS</text>
+<path d="M360,320 H332" fill="none" stroke="#A83232" stroke-width="2.4" marker-end="url(#a)"/>
+<path d="M50,385 V1339 H358" fill="none" stroke="#A83232" stroke-width="2.4" marker-end="url(#a)"/>
+<path d="M330,525 H358" fill="none" stroke="#7A7A7A" stroke-width="2.4" stroke-dasharray="6 5" marker-end="url(#a)"/>
+<path d="M360,1305 H260 V602" fill="none" stroke="#7A7A7A" stroke-width="2.4" stroke-dasharray="6 5" marker-end="url(#a)"/>
+<text x="205" y="1000" font-size="14" font-weight="700" fill="#7A7A7A" text-anchor="start">grava</text>
+<rect x="30" y="1426" width="18" height="18" rx="4" fill="#FFF4E0" stroke="#B86E00" stroke-width="2"/>
+<text x="56" y="1440" font-size="14" fill="#333">guardrail</text>
+<rect x="151" y="1426" width="18" height="18" rx="4" fill="#EEF0FF" stroke="#4B57B8" stroke-width="2"/>
+<text x="177" y="1440" font-size="14" fill="#333">contexto</text>
+<rect x="263" y="1426" width="18" height="18" rx="4" fill="#E3F0FB" stroke="#1F6FB2" stroke-width="2"/>
+<text x="289" y="1440" font-size="14" fill="#333">LLM</text>
+<rect x="330" y="1426" width="18" height="18" rx="4" fill="#E7F6EE" stroke="#1F7F52" stroke-width="2"/>
+<text x="356" y="1440" font-size="14" fill="#333">tools</text>
+<rect x="415" y="1426" width="18" height="18" rx="4" fill="#F6F6F6" stroke="#7A7A7A" stroke-width="2"/>
+<text x="441" y="1440" font-size="14" fill="#333">dados (SIMULADOS)</text>
+<rect x="608" y="1426" width="18" height="18" rx="4" fill="#FCEBEB" stroke="#A83232" stroke-width="2"/>
+<text x="634" y="1440" font-size="14" fill="#333">recusa</text>
+<text x="1470" y="1440" font-size="13" fill="#777" text-anchor="end">EngMan Copilot · Sprint 01 · FIAP × Motiva</text>
+</svg>
