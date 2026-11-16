@@ -1,0 +1,26 @@
+# Segredos e chaves (nunca versionar)
+.env
+.env.*
+*.key
+*.pem
+secrets/
+
+# Python e notebooks (a Sprint 01 não tem código no repositório)
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# Artefatos locais do RAG e do modelo
+chroma_db/
+*.gguf
+
+# Dados reais nunca entram no repositório (só dados SIMULADOS em data/knowledge_base/)
+data/real/
+
+# Sistema operacional e editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

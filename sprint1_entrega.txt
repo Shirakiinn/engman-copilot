@@ -1,0 +1,15 @@
+CHALLENGE SPRINT 01 - ENGMAN COPILOT (FIAP x MOTIVA)
+
+Grupo: XX - Turma 1CCPR
+Recorte escolhido: A - Diagnostico e Confiabilidade
+Persona: Engenheiro de manutencao
+
+Integrantes:
+Arthur de Souza Monteiro - RM 575166 - 1CCPR
+Pedro Lourenco - RM 574878 - 1CCPR
+Pedro Marcassa de Rossi - RM 574723 - 1CCPR
+Moises Cristiano Taguchi - RM 560067 - 1CCPR
+Raul Santos Fernandes - RM 576065 - 1CCPR
+
+Repositorio: https://github.com/Shirakiinn/engman-copilot
+Fluxograma: https://github.com/Shirakiinn/engman-copilot/blob/main/docs/arquitetura.png
