@@ -1,6 +1,6 @@
 CHALLENGE SPRINT 01 - ENGMAN COPILOT (FIAP x MOTIVA)
 
-Grupo: XX - Turma 1CCPR
+Grupo: 5 - Turma 1CCPR
 Recorte escolhido: A - Diagnostico e Confiabilidade
 Persona: Engenheiro de manutencao
 
